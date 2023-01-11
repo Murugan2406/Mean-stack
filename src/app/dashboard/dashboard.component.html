@@ -1,0 +1,173 @@
+
+     <ng-template #EditAccBalance>
+            <div class="gDialogTitle">
+                <span></span>
+                <span class="">Create New Designation</span>
+                <button type="button" id="submit" (click)="dialog.closeAll()" mat-button class="gDialogCloseButton" >
+                    &#x2715;
+                </button>
+            </div>
+        <div class="gDialogContainer">
+            <form [formGroup]="CreateAccBalance" class="row mx-2 form1">
+                <div class="col-12 forminput1">
+                    <mat-label class="gInputLable">Designation Code</mat-label>
+                    <input type="text" formControlName="decCode" class="gInnerInput-border" matInput  />
+                   
+                </div>
+                <div class="col-12 forminput1">
+                    <mat-label class="gInputLable">Designation name</mat-label>
+                    <input type="text" class="" formControlName="decName" matInput class="gInnerInput-border" autocomplete="off"  />
+                </div>
+
+                <div class="col-12 mb-2 mt-4 d-flex text-center justify-content-center" (click)="formSubmit()">
+                    <button type="button" id="submit" mat-button class="gSaveButton" >
+                        Update
+                    </button>
+
+                   
+                </div>
+            </form>
+            </div>
+    </ng-template> 
+
+    <div class="gWrapper">
+        <div class="row mx-2  justify-content-center">
+            
+            <div class="col-md-10 col-xl-6 register-employee gcardContainer  p-5 pt-3">
+              <!-- form card register -->
+              <div class=" gInputLable text-center">  <span>Mean Stack development</span></div>
+              <div class="card-body">
+                <form [formGroup]="employeeForm" class="row mt-3">
+                  <div class="form-group col-12 col-md-6 mt-3">
+                    <label for="inputName">Name</label>
+                    <input class="gInnerInput-border" type="text" formControlName="name" />
+                    <!-- error -->
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="submitted && myForm['name'].errors?.['required']"
+                    >
+                      Name is required.
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-md-6  mt-3">
+                    <label for="inputEmail3">Email</label>
+                    <input class="gInnerInput-border" type="text" formControlName="email" />
+                    <!-- error -->
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="submitted && myForm['email'].errors?.['required']"
+                    >
+                      Enter your email.
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="submitted && myForm['email'].errors?.['pattern']"
+                    >
+                      Enter valid email.
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-md-6  mt-3">
+                    <label for="inputPassword3">Designation</label>
+                    <select
+                      class="custom-select gInnerInput-border"
+                      (change)="updateProfile($event)"
+                      formControlName="designation"
+                    >
+                      <option value="">Choose...</option>
+                      <option
+                        *ngFor="let employeeProfile of EmployeeProfile"
+                        value="{{ employeeProfile }}"
+                      >
+                        {{ employeeProfile }}
+                      </option>
+                    </select>
+                    <!-- error -->
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="submitted && myForm['designation'].errors?.['required']"
+                    >
+                      Choose designation.
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-md-6  mt-3">
+                    <label for="inputVerify3">Mobile No</label>
+                    <input
+                      class="gInnerInput-border"
+                      type="text"
+                      formControlName="phoneNumber"
+                    />
+                    <!-- error -->
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="submitted && myForm['phoneNumber'].errors?.['required']"
+                    >
+                      Enter your phone number.
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="submitted && myForm['phoneNumber'].errors?.['pattern']"
+                    >
+                      Enter Numbers Only
+                    </div>
+                  </div>
+                  <div class="form-group text-center mt-4">
+                    <button class=" gSaveButton" type="button" *ngIf="!edit" (click)="onSubmit()">
+                      Register
+                    </button>
+                    <button class=" gSaveButton" type="button" *ngIf="edit"  (click)="update()">
+                        Update
+                      </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- form card register -->
+          </div>
+
+        <section class="gTableSection mx-3 mt-3">
+          <div class="gTableActionheaders">
+
+            <button class="gNormalButton" mat-button (click)="createDesc(EditAccBalance)">Create designation</button>
+          </div>
+
+            <table class="gNormalTable-sm table" mat-table [dataSource]="datasource">
+                <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+                    <th mat-header-cell *matHeaderCellDef>
+                       {{col}}
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                        <span *ngIf="col === 'S.No'" style="max-width: 40px !important">{{i + 1}}</span>
+                        <span *ngIf="col !== 'SNo'  && col !== 'Edit'&& col !== 'Delete'">{{ row[col] }}</span>
+                        <span *ngIf="col === 'Edit'" style="min-width: 40px">
+                            <button mat-button class="gSaveButton" color="primary"
+                                (click)="OpenPopUp(row)" >
+                          Edit
+                            </button>
+                            </span> <span *ngIf="col === 'Delete'" style="min-width: 40px">
+                            <button mat-button class="gDeleteButton" color="primary" (click)="removeEmployee(row, i-1)"
+                               >
+                                Delete
+                            </button>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" *ngIf="!loading" [attr.colspan]="displayedColumns.length + 1">
+                        No records found.
+                    </td>
+                </tr>
+            </table>
+            <div class="SkeltonLoader text-center justify-content-center d-flex" *ngIf="loading">
+                <mat-spinner></mat-spinner>
+            </div>
+        </section>
+        <input id="pdffile" name="pdffile" type="file" accept=".pdf" (change)="convert($event)" />
+     
+        <div id="result"></div>
+     
+    </div>
