@@ -10,13 +10,13 @@
               <div class="card-body"><form [formGroup]="employeeForm" class="row mt-3">
     <div class="form-group col-12  mt-3">
       <label for="inputName">Name</label>
-      <input class="gInnerInput-border" type="text" formControlName="name" (keydown)="focusNext($event, 'mailId')" />
+      <input class="gInnerInput-border" type="text" formControlName="FullName" (keydown)="focusNext($event, 'mailId')" />
       <!-- error -->
 
     </div>
     <div class="form-group col-12   mt-3">
       <label for="inputEmail3">Email</label>
-      <input class="gInnerInput-border" id="mailId" type="text" formControlName="email"  (keydown)="focusNext($event, 'password')" />
+      <input class="gInnerInput-border" id="mailId" type="text" formControlName="Email"  (keydown)="focusNext($event, 'password')" />
  
 
     </div>
@@ -26,7 +26,7 @@
       <input id="password"
         class="gInnerInput-border"
         type="text"
-        formControlName="password"
+        formControlName="PassWord"
         (keydown)="focusNext($event, 'submit')"
       />
 

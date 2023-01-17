@@ -4,14 +4,16 @@ const employeeRoute = express.Router();
 // Employee model
 let Employee = require('../modal/post');
 let designnation = require('../modal/designation');
-let LoginForm = require('../modal/login')
+const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv');
 
 const post = require('../modal/post');
 
 // Add Employee
-employeeRoute.route('/create').post((req, res, next) => {
 
-  console.log(req.body);
+ employeeRoute.route('/create').post(async (req, res, next) => {
+
+ 
   Employee.create(req.body, (error, data) => {
     if (error) {
       return next(error)
@@ -20,8 +22,21 @@ employeeRoute.route('/create').post((req, res, next) => {
     }
   })
 });
+
 // Get All Employees
 employeeRoute.route('/').get((req, res) => {
+// console.log(req.headers['authorization']);
+  const barearToken = req.headers['authorization'].split(' ');
+  dotenv.config();
+  console.log(process.env.ACCESS_TOKEN_SECRET);
+
+  const decode = jwt.verify(barearToken[1],process.env.ACCESS_TOKEN_SECRET);
+
+  console.log('Muur'+decode); 
+  if(decode)
+{
+
+  // console.log('Muur'+req.headers);
   Employee.find((error, data) => {
     if (error) {
       return next(error)
@@ -29,6 +44,12 @@ employeeRoute.route('/').get((req, res) => {
       res.json(data)
     }
   })
+}else{
+  console.log(''+'ds');
+  res.status(401).json({
+    statusReponse:'Invalid Use'
+  })
+}
 })
 // Get single employee
 employeeRoute.route('/read/:id').get((req, res) => {
@@ -95,9 +116,9 @@ employeeRoute.route('/').get((req, res) => {
   })
 })
 
-
+let LoginForm = require('../modal/login');
 employeeRoute.route('/login').post((req, res, next) =>{
-  console.log(req.body, req.body);
+  console.log(req, req.body);
   LoginForm.create(req.body, (error, data) =>{
 
 if(error){

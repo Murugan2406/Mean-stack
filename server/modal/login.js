@@ -1,20 +1,27 @@
-const { Module } = require("module");
-const  mongoose = require("mongoose");
 
-var LoginSchema = new mongoose.Schema({
+const  mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+var LoginSchema = new Schema({
     FullName:{
         type:String,
-        require: true
+        default: null,
+        require: true,
+        
     },
     Email:{
         type:String,
-        require: true
+        require: true,
+        default: null,
+        unique: true
     },
     PassWord:{
         type:String,
-        require: true
+        require: true,
+        default: null,
+     
     }
 })
 
 
-module.exports = mongoose.Model('LoginSchema', LoginSchema)
+module.exports = mongoose.model('LoginSchema', LoginSchema)

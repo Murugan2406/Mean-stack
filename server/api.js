@@ -16,11 +16,14 @@ mongoose
 
 
 // Setting up port with express js
-const employeeRoute = require('../server/modal/post.route')
+const employeeRoute = require('../server/modal/post.route');
+const UserRoute = require('../server/modal/Routing/user')
+
 const app = express()
 app.use(bodyParser.json())
 app.use(cors())
-app.use('/api', employeeRoute)
+app.use('/api', employeeRoute);
+// app.use('/api', UserRoute)
 
 // app.use(express.static('/public'))
 // app('/', (res, req) => {

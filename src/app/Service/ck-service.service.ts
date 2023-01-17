@@ -71,6 +71,11 @@ export class CkServiceService {
     }
 
 
+    UserRegister(data:any): Observable<any> {
+      let url = `${this.baseUri}/register`;
+      return this.http.post(url, data).pipe(catchError(this.errorMgmt));
+    }
+
     retrieveNationalMapData(): Observable<any> {
       return this.http.get('app/asserts/MuruganCK.pdf');
   
