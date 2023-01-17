@@ -13,7 +13,7 @@ const post = require('../modal/post');
 
  employeeRoute.route('/create').post(async (req, res, next) => {
 
- 
+
   Employee.create(req.body, (error, data) => {
     if (error) {
       return next(error)
@@ -25,31 +25,92 @@ const post = require('../modal/post');
 
 // Get All Employees
 employeeRoute.route('/').get((req, res) => {
-// console.log(req.headers['authorization']);
-  const barearToken = req.headers['authorization'].split(' ');
-  dotenv.config();
-  console.log(process.env.ACCESS_TOKEN_SECRET);
 
-  const decode = jwt.verify(barearToken[1],process.env.ACCESS_TOKEN_SECRET);
 
-  console.log('Muur'+decode); 
-  if(decode)
-{
+
+  const fs = require('fs');
+  const pdfParse = require('pdf-parse');
+  var docxParser = require('docx-parser');
+
+  docxParser.parseDocx("../server/assets/sample.docx", function(data){
+    // console.log(data)
+    const resumeConetent = data.split('\n')
+    let Join1 =[];
+    const obj1 = []
+    resumeConetent.forEach((dataS, index) =>{
+      const obj = dataS.split(':')
+      console.log(obj);
+      const newObj = {
+        [obj[0]] : obj[1]
+      }
+      obj1.push(newObj)
+      })
+      console.log(obj1);
+    res.json(obj1)
+    // Join.forEach((ele, index) =>{
+    //   const mail =  ele.split(':');
+    //   mail.forEach((ele, index) =>{
+    //     if(ele.includes('@')){
+
+    //       console.log('Gmail '+ ele);
+    //     }else if(ele.length === 10 && Number(ele)){
+    //       console.log('Number ' + ele);
+
+    //     }
+    //     else if(ele.toUpperCase() === 'GENDER' ||  ele.toUpperCase() === 'SEX'){
+    //       console.log('Gender ' + mail[index+1]);
+
+    //     }
+    //   })
+
+    // })
+
+})
+
+return
+
+  const readPdf = async (uri) => {
+      const buffer = fs.readFileSync(uri);
+      try {
+          const data = await pdfParse(buffer);
+          // console.log('Content: ', data.text);
+          // console.log('Total pages: ', data.numpages);
+          // console.log('Info: ', data.info);
+          const resumeConetent = data.text.split(' \n')
+          let Join =[];
+          resumeConetent.forEach((dataS, index) =>{
+            Join[index] = dataS
+          })
+          Join.forEach((ele, index) =>{
+            if(ele.includes('@')){
+              console.log('GMail '+ ele);
+            }else if(ele.length === 10 && Number(ele)){
+              console.log('Number ' + ele);
+
+            }
+          })
+          res.json(Join)
+      }catch(err){
+          throw new Error(err);
+      }
+  }
+
+
+  const DUMMY_PDF = '../server/assets/MuruganCK.pdf';
+  readPdf(DUMMY_PDF);
+
+
+
+
 
   // console.log('Muur'+req.headers);
-  Employee.find((error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-}else{
-  console.log(''+'ds');
-  res.status(401).json({
-    statusReponse:'Invalid Use'
-  })
-}
+  // Employee.find((error, data) => {
+  //   if (error) {
+  //     return next(error)
+  //   } else {
+  //     res.json(data)
+  //   }
+  // })
 })
 // Get single employee
 employeeRoute.route('/read/:id').get((req, res) => {
@@ -96,7 +157,7 @@ employeeRoute.route('/delete/:id').delete((req, res, next) => {
 
 // Add Employee
 employeeRoute.route('/designcreate').post((req, res, next) => {
- 
+
   designnation.create(req.body, (error, data) => {
     if (error) {
       return next(error)
