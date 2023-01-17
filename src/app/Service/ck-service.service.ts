@@ -71,6 +71,12 @@ export class CkServiceService {
     }
 
 
+
+    fileReader(data:any): Observable<any> {
+      let url = `${this.baseUri}/fileread`;
+      return this.http.post(url, data).pipe(catchError(this.errorMgmt));
+    }
+
     UserRegister(data:any): Observable<any> {
       let url = `${this.baseUri}/register`;
       return this.http.post(url, data).pipe(catchError(this.errorMgmt));

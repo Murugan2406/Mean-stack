@@ -182,7 +182,10 @@ this.edit = true;
   }
 
   convert(file:any){
-    this.apiService.retrieveNationalMapData().subscribe((data:any) => {
+
+
+    
+    this.apiService.fileReader(file).subscribe((data:any) => {
  
       console.log(data);
       
