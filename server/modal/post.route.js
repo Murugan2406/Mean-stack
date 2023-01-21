@@ -26,18 +26,20 @@ employeeRoute.route('/create').post(async (req, res, next) => {
 
 employeeRoute.route('/fileread').post(async (req, res, next) => {
 
-  if(req.type && req.base64 ){
+  // if(req.type && req.base64 ){
 
   const fs = require('fs');
-  let fileType = req.type;
+  // let fileType = req.type;
   // let fileType = 'DOCX';
-  fileName = req.base64
+  let fileType = 'PDF';
+
+  // fileName = req.base64
 
   // let fileName = "../server/assets/KPResume.pdf";
 
   // let fileName = "../server/assets/sample.docx";
 
-  // let fileName = "../server/assets/MuruganCK.pdf";
+  let fileName = "../server/assets/MuruganCK.pdf";
 
   // let fileName = "../server/assets/sangee.pdf";
 
@@ -70,12 +72,12 @@ employeeRoute.route('/fileread').post(async (req, res, next) => {
         else if (obj[0].toUpperCase().includes('LANGUAGE')) {
           // console.log(obj[0], obj[1]);
                resultObj.LANGUAGE = obj[1];
-               
+
              }
         else if (obj[0].toUpperCase().includes('AGE')) {
     //  console.log(obj[0], obj[1]);
           resultObj.Age = obj[1];
-          
+
         }
         else if (obj[0].toUpperCase().includes('GENDER') || obj[0].toUpperCase().includes('SEX')) {
           resultObj.Gender = obj[1]
@@ -86,11 +88,11 @@ employeeRoute.route('/fileread').post(async (req, res, next) => {
         const newObj = {
           [obj[0]]: obj[1]
         }
-     
+
       }
     })
     res.json(resultObj)
-    
+
   })
 
 }else{
@@ -125,11 +127,11 @@ employeeRoute.route('/fileread').post(async (req, res, next) => {
   readPdf(fileName);
   }
 
-  }else{
-    res.status(200).json({
-      msg: 'Invalid request, Cannot parse'
-    })
-  }
+  // }else{
+  //   res.status(200).json({
+  //     msg: 'Invalid request, Cannot parse'
+  //   })
+  // }
 });
 
 
@@ -182,12 +184,12 @@ employeeRoute.route('/').get((req, res) => {
         else if (obj[0].toUpperCase().includes('LANGUAGE')) {
           // console.log(obj[0], obj[1]);
                resultObj.LANGUAGE = obj[1];
-               
+
              }
         else if (obj[0].toUpperCase().includes('AGE')) {
     //  console.log(obj[0], obj[1]);
           resultObj.Age = obj[1];
-          
+
         }
         else if (obj[0].toUpperCase().includes('GENDER') || obj[0].toUpperCase().includes('SEX')) {
           resultObj.Gender = obj[1]
@@ -198,7 +200,7 @@ employeeRoute.route('/').get((req, res) => {
         const newObj = {
           [obj[0]]: obj[1]
         }
-     
+
       }
     })
     res.json(resultObj)

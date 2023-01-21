@@ -17,13 +17,15 @@ import {MatButtonModule} from '@angular/material/button';
 import { LedgerComponent } from './ledger/ledger.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     LedgerComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

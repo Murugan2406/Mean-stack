@@ -1,16 +1,17 @@
+import { ComponentFixture } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CkServiceService } from '../Service/ck-service.service';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
   employeeForm: FormGroup | any;
 
 
@@ -19,13 +20,12 @@ export class LoginComponent implements OnInit {
   constructor( private fbuilder: FormBuilder, public dialog: MatDialog,
     public fb: FormBuilder,
     public http: HttpClient,
-    private apiService: CkServiceService,
-    public router: Router,
-    ) { }
+    private apiService: CkServiceService) { }
 
   ngOnInit(): void {
 
     this.employeeForm = this.fb.group({
+      FullName: ['', [Validators.required]],
       Email: [
         '',
         [
@@ -55,24 +55,20 @@ export class LoginComponent implements OnInit {
 
   onSubmit(){
 console.log( this.employeeForm.valid, this.employeeForm.value);
-this.apiService.Userlogin(this.employeeForm.value).subscribe({
+this.apiService.UserRegister(this.employeeForm.value).subscribe({
   next: (data) => {
-    Swal.fire({ text: data.StatusResponse + 'muru' });
     this.employeeForm.reset()
-localStorage.setItem('Tokken',  data.AccessToken)
-// console.log(data.StatusResponse);
-
-if( data.StatusResponse.includes('Sucessfully')){
+    Swal.fire({ text: data.statusResponse });
+if( data.statusResponse.includes('Sucessfully')){
   console.log('sucess');
-  this.router.navigate(["dashboard"])
 
 }
+
+  },
+  complete: () => {
   },
   error: (e) => {
     console.log(e);
-  },
-  complete: () => {
-
   },
 });
   }

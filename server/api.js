@@ -22,7 +22,7 @@ const UserRoute = require('../server/modal/Routing/user')
 const app = express()
 app.use(bodyParser.json())
 app.use(cors())
-app.use('/api', employeeRoute);
+app.use('/api', UserRoute);
 
 
 // app.use('/api', UserRoute)
