@@ -6,9 +6,10 @@ import { Router } from 'express';
 import { CkServiceService } from '../Service/ck-service.service';
 import * as pdfjsLib from 'pdfjs-dist';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http'; 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import Swal from 'sweetalert2';
 // import {PDFExtract, PDFExtractOptions} from 'pdf.js-extract';
- 
+
 
 
 @Component({
@@ -21,6 +22,7 @@ export class DashboardComponent implements OnInit {
   displayedColumns: any = [
     'S.No',
     'name',
+    '_id',
     'email',
     'designation',
     'phoneNumber',
@@ -36,7 +38,7 @@ export class DashboardComponent implements OnInit {
 
   datasource = new MatTableDataSource([]);
 
-  loading= false;
+  loading = false;
 
   submitted = false;
   employeeForm: FormGroup | any;
@@ -46,21 +48,23 @@ export class DashboardComponent implements OnInit {
   complete: any;
   // pdfToText: (data: any, callbackPageDone: (arg0: number, arg1: any) => void, callbackAllDone: (arg0: string) => void) => void;
 
-  constructor(  private fbuilder: FormBuilder, public dialog: MatDialog,
+  constructor(private fbuilder: FormBuilder, public dialog: MatDialog,
     public fb: FormBuilder,
     public http: HttpClient,
 
-    
+
     private apiService: CkServiceService) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
-     }
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+  }
 
   ngOnInit(): void {
     this.mainForm();
     this.readEmployee()
   }
-  createDesc(template:TemplateRef<any>){
-    this.dialog.open(template)
+  createDesc(template: TemplateRef<any>) {
+    this.edit = false;
+    this.employeeForm.reset();
+    this.dialog.open(template, { maxWidth: '500px', disableClose: true })
   }
 
   mainForm() {
@@ -78,26 +82,22 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  OpenPopUp(row:any){
-this.Id = row._id
-this.edit = true;
+  OpenPopUp(row: any, template: TemplateRef<any>) {
+    this.Id = row._id
+    this.edit = true;
     this.employeeForm.patchValue(row)
+    this.dialog.open(template, { maxWidth: '500px', disableClose: true })
 
   }
 
-  ViewMore(data:any){
-    console.log(data);
-    
-  }
-
-  formSubmit(){
+  formSubmit() {
     if (!this.CreateAccBalance.valid) {
       alert('form Invalid')
       return false;
     } else {
       return this.apiService.createDesign(this.CreateAccBalance.value).subscribe({
         complete: () => {
-          console.log('Employee successfully created!');
+
           this.CreateAccBalance.reset()
           this.readEmployee()
         },
@@ -106,12 +106,12 @@ this.edit = true;
         },
       });
     }
- 
+
   }
 
 
-   // Choose designation with select dropdown
-   updateProfile(e:any) {
+  // Choose designation with select dropdown
+  updateProfile(e: any) {
     this.employeeForm.get('designation').setValue(e.target.value, {
       onlySelf: true,
     });
@@ -120,17 +120,27 @@ this.edit = true;
   get myForm() {
     return this.employeeForm.controls;
   }
-  onSubmit() {
-  console.log(this.employeeForm.value);
-  
+  createEmployee() {
+
     if (!this.employeeForm.valid) {
+      Swal.fire({ text: 'Please Fill All the fields' })
       return false;
     } else {
       return this.apiService.createEmployee(this.employeeForm.value).subscribe({
+
+        next: (response) => {
+
+          if (response && response.StatusResponse === 'Success') {
+            this.dialog.closeAll()
+            this.employeeForm.reset();
+            Swal.fire({ text: 'New Employee created successfully' })
+            this.readEmployee();
+          } else {
+            Swal.fire({ text: 'No Record Found' })
+          }
+
+        },
         complete: () => {
-          console.log('Employee successfully created!');
-          this.employeeForm.reset()
-          this.readEmployee()
         },
         error: (e) => {
           console.log(e);
@@ -139,74 +149,101 @@ this.edit = true;
     }
   }
 
-  update(){
+  updateEmployees() {
     if (!this.employeeForm.valid) {
-      return ;
+      Swal.fire({ text: 'Please Fill All the fields' })
+
+      return;
     } else {
-    
+
       if (window.confirm('Are you sure?')) {
         let id = this.Id;
         this.apiService.updateEmployee(id, this.employeeForm.value).subscribe({
-          complete: () => {
-            this.employeeForm.reset()
-            this.readEmployee()
-            this.edit = false;
-            console.log('Content updated successfully!');
+
+
+          next: (response) => {
+            if (response && response.StatusResponse === 'Success') {
+              this.dialog.closeAll()
+              this.employeeForm.reset();
+              Swal.fire({ text: 'Employee Data Updated successfully' })
+              this.readEmployee();
+            } else {
+              Swal.fire({ text: 'No Record Found' })
+            }
+
           },
+
           error: (e) => {
             console.log(e);
+          },
+          complete: () => {
+
           },
         });
       }
     }
   }
 
-  readEmployee(){
-    this.apiService.getEmployees().subscribe((data:any) => {
-     this.datasource = new MatTableDataSource(data);
-     console.log(this.datasource.data);
-     
-    })    
+  readEmployee() {
+    this.apiService.getEmployees().subscribe((data: any) => {
+      this.datasource = new MatTableDataSource(data);
+    })
   }
 
-  removeEmployee(employee:any, index:any) {
-    console.log(index);
-    
-    if(window.confirm('Are you sure?')) {
-        this.apiService.deleteEmployee(employee._id).subscribe((data) => {
-      
-          this.readEmployee()
-        }
-      )    
+  removeEmployee(employee: any, index: any) {
+    console.log(employee._id);
+    // return
+
+    if (window.confirm('Are you sure?')) {
+      this.apiService.deleteEmployee(employee._id).subscribe({
+
+        next: (response) => {
+          if (response && response.StatusResponse === 'Success') {
+            this.dialog.closeAll()
+            this.employeeForm.reset();
+            Swal.fire({ text: 'Employee Data Updated successfully' })
+            this.readEmployee();
+          } else {
+            Swal.fire({ text: 'No Record Found' })
+          }
+
+        },
+
+        error: (e) => {
+          console.log(e);
+        },
+        complete: () => {
+
+        },
+      });
     }
   }
 
-  convert(file:any){
+  convert(file: any) {
 
 
-    
-    this.apiService.fileReader(file).subscribe((data:any) => {
- 
+
+    this.apiService.fileReader(file).subscribe((data: any) => {
+
       console.log(data);
-      
-     })  
 
-    
-//     const headerDict = {
-//       'Content-Type': 'application/pdf',
-//       'Accept': 'application/pdf',
-//       'Access-Control-Allow-Headers': 'Content-Type',
-//     }
-//     const requestOptions = {                                                                                                                                                                                 
-//       headers: new HttpHeaders(headerDict), 
-//     };
+    })
+  }
 
-// this.http.get("app/asserts/MuruganCK.pdf").subscribe((data:any) => {
-//   console.log(data);
-// })
-    
-  // this.readPdf("../asserts/MuruganCK's.pdf")
-  
+
+  focusNext(event: any, id: any) {
+
+
+    if (event.key === 'Enter' && event.target.value !== '') {
+
+      setTimeout(() => {
+
+        document.getElementById(id)?.focus()
+      }, 100);
+
+
+    }
+
   }
 
 }

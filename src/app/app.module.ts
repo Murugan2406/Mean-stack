@@ -18,6 +18,9 @@ import { LedgerComponent } from './ledger/ledger.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { HeaderComponent } from './header/header.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { SidenavComponent } from './sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
@@ -25,16 +28,17 @@ import { RegisterComponent } from './register/register.component';
     DashboardComponent,
     LedgerComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    HeaderComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,MatProgressSpinnerModule,MatAutocompleteModule,
     MatTableModule,ReactiveFormsModule,HttpClientModule,MatIconModule,
     BrowserAnimationsModule,MatSnackBarModule, FormsModule, MatInputModule, MatDialogModule,
-    MatButtonModule,MatSidenavModule
+    MatButtonModule,MatSidenavModule,MatToolbarModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -11,7 +11,7 @@ import {
 })
 export class CkServiceService {
 
-  baseUri: string = 'http://localhost:4000/api';
+  baseUri: string = 'http://localhost:4000/api/';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private http: HttpClient) { }
@@ -22,7 +22,7 @@ export class CkServiceService {
   }
   // Get all employees
   getEmployees() {
-    return this.http.get(`${this.baseUri}`);
+    return this.http.get(`${this.baseUri}getEmployee`);
   }
   // Get employee
   getEmployee(id:any): Observable<any> {

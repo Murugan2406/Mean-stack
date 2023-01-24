@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CkServiceService } from '../Service/ck-service.service';
 import Swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -14,8 +15,8 @@ import Swal from 'sweetalert2';
 export class RegisterComponent implements OnInit {
   employeeForm: FormGroup | any;
 
-
-
+  user: any;
+  loggedIn: any;
 
   constructor( private fbuilder: FormBuilder, public dialog: MatDialog,
     public fb: FormBuilder,
@@ -72,5 +73,7 @@ if( data.statusResponse.includes('Sucessfully')){
   },
 });
   }
+
+
 
 }
