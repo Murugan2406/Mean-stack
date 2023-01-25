@@ -57,7 +57,6 @@ export class RegisterComponent implements OnInit {
 
 
   onSubmit(){
-console.log( this.employeeForm.valid, this.employeeForm.value);
 this.apiService.UserRegister(this.employeeForm.value).subscribe({
   next: (data) => {
     this.employeeForm.reset()
@@ -65,16 +64,12 @@ this.apiService.UserRegister(this.employeeForm.value).subscribe({
     if(data.statusResponse === 'Success'){
       this.router.navigate(["login"])
     }
-if( data.statusResponse.includes('Sucessfully')){
-  console.log('sucess');
-
-}
 
   },
   complete: () => {
   },
   error: (e) => {
-    console.log(e);
+     Swal.fire({ text: e })
   },
 });
   }

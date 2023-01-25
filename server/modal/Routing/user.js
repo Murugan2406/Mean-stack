@@ -28,7 +28,6 @@ return
 
   UserRoute.route('/login').post(async (req, res, next) =>{
     const oldUser = await registerModel.findOne({ Email:req.body.Email });
-    // console.log(oldUser);
     if (oldUser) {
       dotenv.config();
       const token = jwt.sign(

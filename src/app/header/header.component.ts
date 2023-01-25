@@ -29,7 +29,7 @@ this.empname = empName
     if (window.confirm('Are you sure to logout?')) {
 
        localStorage.removeItem('empName')
-       localStorage.removeItem('tokken');
+       localStorage.removeItem('Tokken');
 
        Swal.fire({ text: 'successfully logout' });
        this.router.navigate(["/login"])

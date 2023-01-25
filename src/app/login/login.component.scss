@@ -1,10 +1,6 @@
 .gcardContainer, .gTableSection{
     box-shadow: 0 0 65px -26px #9275ee
 }
-.CardContainer{
-    align-items: center;
-    height: 100vh;
-}
 
 .oAuthButton{
   background-color:#90c330;
@@ -24,4 +20,27 @@
   margin: 0 5px;
   min-width: 60px !important;
   border: 1px solid transparent;
+}
+
+.divrow{
+  height: 100vh;
+  align-items: center;
+}
+.gcardContainer {
+  position: relative;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 65px -26px #9275ee;
+  align-items: center;
+  height: 400px;
+}
+
+.loginform, .registerform {
+  position: absolute;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+.registerform {
+transform: rotateY(180deg);
 }

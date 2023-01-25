@@ -1,58 +1,42 @@
+<div class="gWrapper">
+  <div class="row mx-2  justify-content-center CardContainer">
+
+    <div class="col-md-10 col-xl-4 register-employee gcardContainer  p-5 py-3">x
+      <div class=" gInputLable text-center"> <span>Register New user</span></div>
+      <div class="card-body">
+        <form [formGroup]="employeeForm" class="row ">
+          <div class="form-group col-12  mt-3">
+            <label for="inputName">Name</label>
+            <input class="gInnerInput-border" type="text" formControlName="FullName"
+              (keydown)="focusNext($event, 'mailId')" />
+
+          </div>
+          <div class="form-group col-12   mt-3">
+            <label for="inputEmail3">Email</label>
+            <input class="gInnerInput-border" id="mailId" type="text" formControlName="Email"
+              (keydown)="focusNext($event, 'password')" />
+          </div>
+          <div class="form-group col-12   mt-3">
+            <label for="inputVerify3">PassWord</label>
+            <input id="password" class="gInnerInput-border" type="text" formControlName="PassWord"
+              (keydown)="focusNext($event, 'submit')" />
+
+          </div>
+          <div class="form-group text-center mt-3 gap-4 d-flex justify-content-center">
+            <button class="oAuthButton" id="submit" type="button" (click)="onSubmit()">
+              Register
+            </button>
+          </div>
+          <div class="form-group text-center mt-5 gap-4 d-flex justify-content-center">
+            <span class="gInputLable">Alreadt have account ? click here</span>
+            <button class="oAuthButton" style="background-color: #000 !important;" id="submit" type="button" routerLink="/login">
+              Login
+            </button>
+          </div>
+
+        </form>
 
 
-
-    <div class="gWrapper">
-      <div class="row mx-2  justify-content-center CardContainer" >
-
-          <div class="col-md-10 col-xl-4 register-employee gcardContainer  p-5 pt-3">
-            <!-- form card register -->
-            <div class=" gInputLable text-center">  <span>Register New user</span></div>
-            <div class="card-body"><form [formGroup]="employeeForm" class="row mt-3">
-  <div class="form-group col-12  mt-3">
-    <label for="inputName">Name</label>
-    <input class="gInnerInput-border" type="text" formControlName="FullName" (keydown)="focusNext($event, 'mailId')" />
-    <!-- error -->
-
+      </div>
+    </div>
   </div>
-  <div class="form-group col-12   mt-3">
-    <label for="inputEmail3">Email</label>
-    <input class="gInnerInput-border" id="mailId" type="text" formControlName="Email"  (keydown)="focusNext($event, 'password')" />
-
-
-  </div>
-
-  <div class="form-group col-12   mt-3">
-    <label for="inputVerify3">PassWord</label>
-    <input id="password"
-      class="gInnerInput-border"
-      type="text"
-      formControlName="PassWord"
-      (keydown)="focusNext($event, 'submit')"
-    />
-
-  </div>
-  <div class="form-group text-center mt-4 gap-4 d-flex justify-content-center">
-
-    <!-- <button class="gSaveButton" id="submit" type="button"routerLink="/login">
-      Login
-    </button> -->
-    <button class="oAuthButton" id="submit" type="button" (click)="onSubmit()">
-      Register
-    </button>
-
-  </div>
-  <!-- <div class="form-group text-center mt-4 gap-4 d-flex justify-content-center">
-
-    <button class="oAuthButton col-12" id="submit" type="button">
-      Login with google
-    </button>
-
-
-
-  </div> -->
-</form>
-
-
-</div>
-</div>
-</div>

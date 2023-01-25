@@ -6,20 +6,15 @@ let Employee = require('../modal/post');
 let designnation = require('../modal/designation');
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv');
-
+const createError = require('http-errors');
 const post = require('../modal/post');
 
 const registerModel = require('./login')
 var bcrypt = require('bcryptjs');
 
 
-
-// login register
-
 employeeRoute.route('/register').post(async (req, res, next) =>{
   const oldUser = await registerModel.findOne({ Email:req.body.Email });
-  console.log(oldUser);
-
   if (oldUser) {
     res.json({statusResponse:'User Already Exist. Please Login'})
 return
@@ -37,11 +32,10 @@ return
 
   employeeRoute.route('/login').post(async (req, res, next) =>{
     const oldUser = await registerModel.findOne({ Email:req.body.Email });
-    // console.log(oldUser);
     if (oldUser) {
       dotenv.config();
       const token = jwt.sign(
-         'oldUser' ,
+         {oldUser} ,
         process.env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: "2h",
@@ -58,15 +52,143 @@ return
 
     }else{
       res.json( {StatusResponse : "Invalid Login Credential"})
-      // res.status(401).json({
-      //   StatusResponse: "Invalid User"
-      // })
     }
 
     });
 
 
+employeeRoute.route('/getEmployee' ).get(async (req, res, ) => {
 
+    const oldUser = await registerModel.findOne({ Email:req.body.Email });
+  if(oldUser){
+    return res.status(401).send({ auth: false, message: 'Invalid User' });
+  }  
+  var token = req.headers['authorization'];
+  if (!token){
+    return res.status(401).send({ auth: false, message: 'No token provided.' });
+  }
+  dotenv.config();
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, decoded) => {
+    if(err){
+      return res.status(401).send({statusResponse:'Invalid user'});
+    }
+  Employee.find(function (err, employee) {
+    if (err) {
+      res.json({statusResponse:'unknown error'});
+    }
+    else {
+    res.json(employee);
+    }
+    });
+  });
+})
+
+
+employeeRoute.route('/read/:id').get((req, res) => {
+  Employee.findById(req.params.id, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
+
+
+employeeRoute.route('/create').post(async (req, res, next) => {
+    const oldUser = await registerModel.findOne({ Email:req.body.Email });
+  if(oldUser){
+    return res.status(401).send({ auth: false, message: 'Invalid User' });
+  } 
+   var token = req.headers['authorization'];
+  if (!token){
+    return res.status(401).send({ auth: false, message: 'No token provided.' });
+  }
+  dotenv.config();
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, decoded) => {
+    if(err){
+      return res.status(401).send({statusResponse:'Invalid user'});
+    }
+  Employee.create(req.body, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      if(data){
+        res.json({StatusResponse:'Success'})
+      }else{
+        res.json({StatusResponse:'Unknown Error'})
+      }
+    }
+  })
+})
+});
+
+
+
+employeeRoute.route('/update/:id').put(async(req, res, next) => {
+    const oldUser = await registerModel.findOne({ Email:req.body.Email });
+  if(oldUser){
+    return res.status(401).send({ auth: false, message: 'Invalid User' });
+  }  var token = req.headers['authorization'];
+  if (!token){
+    return res.status(401).send({ auth: false, message: 'No token provided.' });
+  }
+  dotenv.config();
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, decoded) => {
+    if(err){
+      return res.status(401).send({statusResponse:'Invalid user'});
+    }
+  Employee.findByIdAndUpdate(req.params.id, {
+    $set: req.body
+  }, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      if(data){
+        res.json({StatusResponse:'Success'})
+      }else{
+        res.json({StatusResponse:'Unknown Error'})
+
+      }
+    }
+  })
+})
+})
+
+
+
+employeeRoute.route('/delete/:id').delete(async(req, res, next) => {
+    const oldUser = await registerModel.findOne({ Email:req.body.Email });
+  if(oldUser){
+    return res.status(401).send({ auth: false, message: 'Invalid User' });
+  }  
+  var token = req.headers['authorization'];
+  if (!token){
+    return res.status(401).send({ auth: false, message: 'No token provided.' });
+  }
+  dotenv.config();
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, decoded) => {
+    if(err){
+      return res.status(401).send({statusResponse:'Invalid user'});
+    }
+  Employee.findByIdAndDelete(req.params.id, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      if(data){
+        res.json({StatusResponse:'Success'})
+      }else{
+        res.json({StatusResponse:'Unknown Error'})
+
+      }
+    }
+  })
+})
+})
+
+
+
+// ======================= DesignNamtion
 
 
 employeeRoute.route('/fileread').post(async (req, res, next) => {
@@ -103,7 +225,6 @@ employeeRoute.route('/fileread').post(async (req, res, next) => {
       const obj = dataS.split(':')
       resultObj.Name = resumeConetent[0]
       if (obj[0] && obj[1]) {
-        // console.log(obj[0]);
         if (obj[0].toUpperCase().includes('MAIL') || obj[0].toUpperCase().includes('EMAIL')
           || obj[0].toUpperCase().includes('GMAIL') || obj[1].includes('@')) {
           resultObj.Email = obj[1]
@@ -115,12 +236,10 @@ employeeRoute.route('/fileread').post(async (req, res, next) => {
           resultObj.Name = obj[1]
         }
         else if (obj[0].toUpperCase().includes('LANGUAGE')) {
-          // console.log(obj[0], obj[1]);
                resultObj.LANGUAGE = obj[1];
 
              }
         else if (obj[0].toUpperCase().includes('AGE')) {
-    //  console.log(obj[0], obj[1]);
           resultObj.Age = obj[1];
 
         }
@@ -172,134 +291,6 @@ employeeRoute.route('/fileread').post(async (req, res, next) => {
   readPdf(fileName);
   }
 
-  // }else{
-  //   res.status(200).json({
-  //     msg: 'Invalid request, Cannot parse'
-  //   })
-  // }
 });
-
-
-// Get All Employees
-employeeRoute.route('/getEmployee').get((req, res) => {
-  Employee.find(function (err, employee) {
-    if (err) {
-    console.log(err);
-    }
-    else {
-    res.json(employee);
-    }
-    });
-})
-// Get single employee
-employeeRoute.route('/read/:id').get((req, res) => {
-  Employee.findById(req.params.id, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-})
-
-// Add Employee
-
-employeeRoute.route('/create').post(async (req, res, next) => {
-
-
-  Employee.create(req.body, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      if(data){
-        res.json({StatusResponse:'Success'})
-      }else{
-        res.json({StatusResponse:'Unknown Error'})
-
-      }
-
-    }
-  })
-});
-
-// Update employee
-employeeRoute.route('/update/:id').put((req, res, next) => {
-  Employee.findByIdAndUpdate(req.params.id, {
-    $set: req.body
-  }, (error, data) => {
-    if (error) {
-      return next(error);
-      console.log(error)
-    } else {
-      if(data){
-        res.json({StatusResponse:'Success'})
-      }else{
-        res.json({StatusResponse:'Unknown Error'})
-
-      }
-    }
-  })
-})
-// Delete employee
-employeeRoute.route('/delete/:id').delete((req, res, next) => {
-  Employee.findByIdAndDelete(req.params.id, (error, data) => {
-    if (error) {
-      return next(error);
-    } else {
-      if(data){
-        res.json({StatusResponse:'Success'})
-      }else{
-        res.json({StatusResponse:'Unknown Error'})
-
-      }
-      // res.status(200).json({
-      //   msg: data
-      // })
-    }
-  })
-})
-
-
-
-// ======================= DesignNamtion
-
-
-// Add Employee
-employeeRoute.route('/designcreate').post((req, res, next) => {
-
-  designnation.create(req.body, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-});
-// Get All Employees
-employeeRoute.route('/').get((req, res) => {
-  designnation.find((error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-})
-
-let LoginForm = require('../modal/login');
-const { LOG_DEBUG } = require('karma/lib/constants');
-employeeRoute.route('/login').post((req, res, next) => {
-  console.log(req, req.body);
-  LoginForm.create(req.body, (error, data) => {
-
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-
-  })
-})
-
 
 module.exports = employeeRoute;

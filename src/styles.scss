@@ -712,7 +712,7 @@ input[type=text]:read-only {
 
 .gAutoCompleteContainer {
     border-radius: 10px !important;
-    padding: 10px !important;
+  
     background: rgba(255, 255, 255, 5) !important;
     // box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.30) !important;
     backdrop-filter: blur(4px) !important;
@@ -734,6 +734,7 @@ input[type=text]:read-only {
     font-weight: 500 !important;
     color: var(--select-option-color) !important;
     font-family: system-ui !important;
+    margin: 10px !important;
 }
 
 .gSelectOption:hover {

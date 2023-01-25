@@ -11,8 +11,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  employeeForm: FormGroup | any;
+  loginForm: FormGroup | any;
+  registerForm: FormGroup | any;
 
+
+
+  showlogin = true
 
 
 
@@ -24,11 +28,7 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-
-
-
-
-    this.employeeForm = this.fb.group({
+    this.loginForm = this.fb.group({
       Email: [
         '',
         [
@@ -38,44 +38,48 @@ export class LoginComponent implements OnInit {
       ],
       PassWord: ['', [Validators.required]],
     });
-
+    this.registerForm = this.fb.group({
+      FullName: ['', [Validators.required]],
+      Email: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$'),
+        ],
+      ],
+      PassWord: ['', [Validators.required]],
+    });
   }
 
   focusNext(event:any, id:any){
-
-
     if(event.key === 'Enter' && event.target.value !== ''){
-
       setTimeout(() => {
-
         document.getElementById(id)?.focus()
       }, 100);
-
-
     }
-
   }
 
 
-  onSubmit(){
-console.log( this.employeeForm.valid, this.employeeForm.value);
-this.apiService.Userlogin(this.employeeForm.value).subscribe({
+  loginSubmit(){
+this.apiService.Userlogin(this.loginForm.value).subscribe({
   next: (data) => {
     Swal.fire({ text: data.StatusResponse });
-    this.employeeForm.reset();
-localStorage.setItem('empName',  data.FullName)
-
-localStorage.setItem('Tokken',  data.AccessToken)
-// console.log(data.StatusResponse);
+    this.loginForm.reset();
 
 if( data.StatusResponse.includes('Sucessfully')){
-  console.log('sucess');
-  this.router.navigate(["dashboard"])
+  localStorage.setItem('empName',  data.FullName)
+  localStorage.setItem('Tokken',  data.AccessToken)
+  Swal.fire({text:data.StatusResponse})
+  setTimeout(() => {
+    
+    this.router.navigate(["dashboard"])
+  }, 1000);
+
 
 }
   },
   error: (e) => {
-    console.log(e);
+     Swal.fire({ text: e })
   },
   complete: () => {
 
@@ -83,4 +87,44 @@ if( data.StatusResponse.includes('Sucessfully')){
 });
   }
 
+
+
+  
+  onSubmit(){
+    this.apiService.UserRegister(this.registerForm.value).subscribe({
+      next: (data) => {
+        this.registerForm.reset()
+        Swal.fire({ text: data.statusResponse });
+        if(data.statusResponse === 'Success'){
+          this.toggleform()
+          // this.router.navigate(["login"])
+        }
+
+      },
+      complete: () => {
+      },
+      error: (e) => {
+         Swal.fire({ text: e })
+      },
+    });
+      }
+
+
+  toggleform(){
+
+    // const elements = document.querySelectorAll('.gcardContainer');
+
+    // elements.style.backgroundColor = 'pink';
+    if(this.showlogin){
+    const data =  document.getElementById('gcardContainer') as HTMLElement
+    data.style.transform = "rotateY(180deg)" || ''
+    this.showlogin = !this.showlogin
+    }else{
+      const data =  document.getElementById('gcardContainer') as HTMLElement
+    data.style.transform = "rotateY(0deg)" || ''
+    this.showlogin = !this.showlogin
+    }
+
+   
+  }
 }

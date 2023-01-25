@@ -12,17 +12,25 @@ import {
 export class CkServiceService {
 
   baseUri: string = 'http://localhost:4000/api/';
-  headers = new HttpHeaders().set('Content-Type', 'application/json');
+  // headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+  // httpOptions = {
+    headers =  new HttpHeaders({
+      'Authorization': localStorage.getItem('Tokken') || '',
+      'content-type': 'application/json',
+    })
+  // };
 
   constructor(private http: HttpClient) { }
 
   createEmployee(data:any): Observable<any> {
     let url = `${this.baseUri}/create`;
-    return this.http.post(url, data).pipe(catchError(this.errorMgmt));
+    return this.http.post(url, data, { headers: this.headers }).pipe(catchError(this.errorMgmt));
   }
   // Get all employees
   getEmployees() {
-    return this.http.get(`${this.baseUri}getEmployee`);
+
+    return this.http.get(`${this.baseUri}getEmployee`, { headers: this.headers } );
   }
   // Get employee
   getEmployee(id:any): Observable<any> {
@@ -57,7 +65,6 @@ export class CkServiceService {
         // Get server-side error
         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
       }
-      console.log(errorMessage);
       return throwError(() => {
         return errorMessage;
       });

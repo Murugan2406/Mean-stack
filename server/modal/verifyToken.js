@@ -1,23 +1,17 @@
 const jwt = require('jsonwebtoken')
 
-
-verifyToken:(req, res, next) =>{
-if(req.headers){
-    console.log(req.headers);
-    dotenv.config();
-  const tokken = req.headers['Authorization'].split(' ');
-  jwt.verify(tokken[1], process.env.ACCESS_TOKEN_SECRET,(err, payload)=>{
-    if(err){
-        return next(createError.Unauthorized())
-    }else{
-        req.payload = payload;
-        next()
-    }
-  } );
-  return true
+function verifyToken(req, res, next) {
+  var token = req.headers['Authorization'];
+  if (!token)
+    return res.status(403).send({ auth: false, message: 'No token provided.' });
+    
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded) {
+    if (err)
+    return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    // if everything good, save to request for use in other routes
+    req.userId = decoded.id;
+    next();
+  });
 }
-  else{
-    return next(createError.Unauthorized())
-  }
 
-}
+module.exports = verifyToken;

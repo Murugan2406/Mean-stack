@@ -5,11 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { CkServiceService } from '../Service/ck-service.service';
 import * as pdfjsLib from 'pdfjs-dist';
-
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
-// import {PDFExtract, PDFExtractOptions} from 'pdf.js-extract';
-
 
 
 @Component({
@@ -19,22 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class DashboardComponent implements OnInit {
 
-  displayedColumns: any = [
-    'S.No',
-    'name',
-    '_id',
-    'email',
-    'designation',
-    'phoneNumber',
-    'Edit',
-    'Delete'
-  ];
-
-  CreateAccBalance = this.fbuilder.group({
-    decCode: ['', Validators.required],
-    decName: ['', Validators.required],
-
-  });
+  displayedColumns: any = ['S.No','_id','name', 'email','designation','phoneNumber', 'Edit','Delete'  ];
 
   datasource = new MatTableDataSource([]);
 
@@ -42,11 +24,10 @@ export class DashboardComponent implements OnInit {
 
   submitted = false;
   employeeForm: FormGroup | any;
-  EmployeeProfile: any = ['Finance', 'BDM', 'HR', 'Sales', 'Admin', 'Action'];
+  EmployeeProfile: any = ['FrontEnd', 'BackEnd', 'DataBase', 'UI'];
   Id: any;
   edit: boolean = false;
   complete: any;
-  // pdfToText: (data: any, callbackPageDone: (arg0: number, arg1: any) => void, callbackAllDone: (arg0: string) => void) => void;
 
   constructor(private fbuilder: FormBuilder, public dialog: MatDialog,
     public fb: FormBuilder,
@@ -57,12 +38,9 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    localStorage.setItem('number', '123')
-
-    const token = localStorage.getItem('Tokken')
-
+    const token = localStorage.getItem('Tokken');
     if(token){
+
     this.mainForm();
     this.readEmployee()
   }else{
@@ -99,26 +77,6 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  formSubmit() {
-    if (!this.CreateAccBalance.valid) {
-      alert('form Invalid')
-      return false;
-    } else {
-      return this.apiService.createDesign(this.CreateAccBalance.value).subscribe({
-        complete: () => {
-
-          this.CreateAccBalance.reset()
-          this.readEmployee()
-        },
-        error: (e) => {
-          console.log(e);
-        },
-      });
-    }
-
-  }
-
-
   // Choose designation with select dropdown
   updateProfile(e: any) {
     this.employeeForm.get('designation').setValue(e.target.value, {
@@ -136,9 +94,7 @@ export class DashboardComponent implements OnInit {
       return false;
     } else {
       return this.apiService.createEmployee(this.employeeForm.value).subscribe({
-
         next: (response) => {
-
           if (response && response.StatusResponse === 'Success') {
             this.dialog.closeAll()
             this.employeeForm.reset();
@@ -152,7 +108,7 @@ export class DashboardComponent implements OnInit {
         complete: () => {
         },
         error: (e) => {
-          console.log(e);
+           Swal.fire({ text: e })
         },
       });
     }
@@ -183,7 +139,7 @@ export class DashboardComponent implements OnInit {
           },
 
           error: (e) => {
-            console.log(e);
+             Swal.fire({ text: e })
           },
           complete: () => {
 
@@ -194,18 +150,21 @@ export class DashboardComponent implements OnInit {
   }
 
   readEmployee() {
-    this.apiService.getEmployees().subscribe((data: any) => {
-      this.datasource = new MatTableDataSource(data);
-    })
+    this.apiService.getEmployees().subscribe({
+      next: (data:any) => {
+        this.datasource = new MatTableDataSource(data);
+      },
+      error: (e:any) => {
+         Swal.fire({ text: e })
+      },
+  })
+
   }
 
   removeEmployee(employee: any, index: any) {
-    console.log(employee._id);
-    // return
 
     if (window.confirm('Are you sure?')) {
       this.apiService.deleteEmployee(employee._id).subscribe({
-
         next: (response) => {
           if (response && response.StatusResponse === 'Success') {
             this.dialog.closeAll()
@@ -215,11 +174,9 @@ export class DashboardComponent implements OnInit {
           } else {
             Swal.fire({ text: 'No Record Found' })
           }
-
         },
-
         error: (e) => {
-          console.log(e);
+           Swal.fire({ text: e })
         },
         complete: () => {
 
@@ -229,30 +186,26 @@ export class DashboardComponent implements OnInit {
   }
 
   convert(file: any) {
-
-
-
     this.apiService.fileReader(file).subscribe((data: any) => {
-
       console.log(data);
-
     })
   }
 
 
   focusNext(event: any, id: any) {
-
-
     if (event.key === 'Enter' && event.target.value !== '') {
-
       setTimeout(() => {
-
         document.getElementById(id)?.focus()
       }, 100);
-
-
     }
 
+  }
+
+  designChoosen(event:any){
+    if(event.isUserInput){
+document.getElementById('phnumber')?.focus()
+
+    }
   }
 
 }

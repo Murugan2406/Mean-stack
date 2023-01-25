@@ -1,10 +1,12 @@
 <mat-toolbar class="gHeader d-flex justify-content-between">
-
   <span></span>
     <span>Mean Stck Development</span>
-
-    <span><button mat-icon-button class="gIconButton" [matMenuTriggerFor]="menu" matTooltip="UserName: {{empname}}">{{empname[0]}}</button></span>
+    <span><button mat-icon-button class="gIconButton" [matMenuTriggerFor]="menu" >{{empname[0]}}</button></span>
     <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="logout()">
+       UserName:
+        <span>{{empname}}</span>
+      </button>
       <button mat-menu-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
         <span>logOut</span>
