@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { ComponentFixture } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -21,7 +22,8 @@ export class RegisterComponent implements OnInit {
   constructor( private fbuilder: FormBuilder, public dialog: MatDialog,
     public fb: FormBuilder,
     public http: HttpClient,
-    private apiService: CkServiceService) { }
+    private apiService: CkServiceService,
+    public router: Router,) { }
 
   ngOnInit(): void {
 
@@ -60,6 +62,9 @@ this.apiService.UserRegister(this.employeeForm.value).subscribe({
   next: (data) => {
     this.employeeForm.reset()
     Swal.fire({ text: data.statusResponse });
+    if(data.statusResponse === 'Success'){
+      this.router.navigate(["login"])
+    }
 if( data.statusResponse.includes('Sucessfully')){
   console.log('sucess');
 

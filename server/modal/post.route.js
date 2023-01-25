@@ -9,7 +9,6 @@ const dotenv = require('dotenv');
 
 const post = require('../modal/post');
 
-const UserRoute = express.Router();
 const registerModel = require('./login')
 var bcrypt = require('bcryptjs');
 
@@ -17,13 +16,12 @@ var bcrypt = require('bcryptjs');
 
 // login register
 
-UserRoute.route('/register').post(async (req, res, next) =>{
+employeeRoute.route('/register').post(async (req, res, next) =>{
   const oldUser = await registerModel.findOne({ Email:req.body.Email });
+  console.log(oldUser);
 
   if (oldUser) {
-
     res.json({statusResponse:'User Already Exist. Please Login'})
-    // return res.status(200).send("User Already Exist. Please Login");
 return
   }
   req.body.PassWord = await bcrypt.hash(req.body.PassWord, 10);
@@ -31,20 +29,19 @@ return
       if (error) {
         return next(error)
       } else {
-
-        res.json({statusResponse:'User SuccessFully registered'})
+        res.json({statusResponse:'Success'})
       }
     })
   });
 
 
-  UserRoute.route('/login').post(async (req, res, next) =>{
+  employeeRoute.route('/login').post(async (req, res, next) =>{
     const oldUser = await registerModel.findOne({ Email:req.body.Email });
     // console.log(oldUser);
     if (oldUser) {
       dotenv.config();
       const token = jwt.sign(
-        { oldUser },
+         'oldUser' ,
         process.env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: "2h",
@@ -220,7 +217,7 @@ employeeRoute.route('/create').post(async (req, res, next) => {
         res.json({StatusResponse:'Unknown Error'})
 
       }
-      
+
     }
   })
 });

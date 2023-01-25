@@ -78,7 +78,7 @@ export class CkServiceService {
     }
 
     UserRegister(data:any): Observable<any> {
-      let url = `${this.baseUri}/register`;
+      let url = `${this.baseUri}register`;
       return this.http.post(url, data).pipe(catchError(this.errorMgmt));
     }
     Userlogin(data:any): Observable<any> {

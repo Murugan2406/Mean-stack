@@ -21,7 +21,8 @@ import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { SidenavComponent } from './sidenav/sidenav.component';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatMenuModule} from '@angular/material/menu';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,7 @@ import { SidenavComponent } from './sidenav/sidenav.component';
     AppRoutingModule,MatProgressSpinnerModule,MatAutocompleteModule,
     MatTableModule,ReactiveFormsModule,HttpClientModule,MatIconModule,
     BrowserAnimationsModule,MatSnackBarModule, FormsModule, MatInputModule, MatDialogModule,
-    MatButtonModule,MatSidenavModule,MatToolbarModule
+    MatButtonModule,MatSidenavModule,MatToolbarModule,MatTooltipModule, MatMenuModule
   ],
   bootstrap: [AppComponent]
 })

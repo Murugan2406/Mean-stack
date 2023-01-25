@@ -16,7 +16,7 @@
             <div class="form-group mt-3 col-12">
               <label for="inputEmail3">Email</label>
               <input class="gInnerInput-border" type="email" id="mail" formControlName="email" (keydown)="focusNext($event, 'select')" />
-         
+
             </div>
             <div class="form-group mt-3 col-12">
               <label for="inputPassword3">Designation</label>
@@ -48,7 +48,7 @@
                 <div class="mt-3 forminput1">
                     <mat-label class="gInputLable">Designation Code</mat-label>
                     <input type="text" formControlName="decCode" class="gInnerInput-border" matInput  />
-                   
+
                 </div>
                 <div class="mt-3 forminput1">
                     <mat-label class="gInputLable">Designation name</mat-label>
@@ -60,11 +60,11 @@
                         Update
                     </button>
 
-                   
+
                 </div>
             </form> -->
             </div>
-    </ng-template> 
+    </ng-template>
 
     <div class="gWrapper">
       <app-header></app-header>
@@ -85,14 +85,12 @@
                         <span *ngIf="col === 'S.No'" style="max-width: 40px !important">{{i + 1}}</span>
                         <span *ngIf="col !== 'SNo'  && col !== 'Edit'&& col !== 'Delete'">{{ row[col] }}</span>
                         <span *ngIf="col === 'Edit'" style="min-width: 40px">
-                            <button mat-button class="gSaveButton" color="primary"
-                                (click)="OpenPopUp(row, EditAccBalance)" >
-                          Edit
+                            <button mat-icon-button class="gEditIcon" (click)="OpenPopUp(row, EditAccBalance)" >
+                          <mat-icon>edit</mat-icon>
                             </button>
                             </span> <span *ngIf="col === 'Delete'" style="min-width: 40px">
-                            <button mat-button class="gDeleteButton" color="primary" (click)="removeEmployee(row, i)"
-                               >
-                                Delete
+                            <button mat-icon-button class="gDeleteIcon" (click)="removeEmployee(row, i)">
+                          <mat-icon>delete</mat-icon>
                             </button>
                         </span>
                     </td>
@@ -112,8 +110,8 @@
                 <mat-spinner></mat-spinner>
             </div>
         </section>
-        
-     
+
+
         <div id="result"></div>
-     
+
     </div>

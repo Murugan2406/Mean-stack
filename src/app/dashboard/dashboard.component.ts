@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from 'express';
+import { Router } from '@angular/router';
 import { CkServiceService } from '../Service/ck-service.service';
 import * as pdfjsLib from 'pdfjs-dist';
 
@@ -51,15 +51,24 @@ export class DashboardComponent implements OnInit {
   constructor(private fbuilder: FormBuilder, public dialog: MatDialog,
     public fb: FormBuilder,
     public http: HttpClient,
-
-
+    public router: Router,
     private apiService: CkServiceService) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
   }
 
   ngOnInit(): void {
+
+    localStorage.setItem('number', '123')
+
+    const token = localStorage.getItem('Tokken')
+
+    if(token){
     this.mainForm();
     this.readEmployee()
+  }else{
+    Swal.fire({ text: 'UnAuthorized user please login' });
+    this.router.navigate(["/login"])
+  }
   }
   createDesc(template: TemplateRef<any>) {
     this.edit = false;

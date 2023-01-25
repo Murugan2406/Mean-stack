@@ -25,6 +25,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+
+
     this.employeeForm = this.fb.group({
       Email: [
         '',
@@ -35,6 +38,7 @@ export class LoginComponent implements OnInit {
       ],
       PassWord: ['', [Validators.required]],
     });
+
   }
 
   focusNext(event:any, id:any){
@@ -57,8 +61,10 @@ export class LoginComponent implements OnInit {
 console.log( this.employeeForm.valid, this.employeeForm.value);
 this.apiService.Userlogin(this.employeeForm.value).subscribe({
   next: (data) => {
-    Swal.fire({ text: data.StatusResponse + 'muru' });
-    this.employeeForm.reset()
+    Swal.fire({ text: data.StatusResponse });
+    this.employeeForm.reset();
+localStorage.setItem('empName',  data.FullName)
+
 localStorage.setItem('Tokken',  data.AccessToken)
 // console.log(data.StatusResponse);
 
