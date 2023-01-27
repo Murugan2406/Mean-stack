@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, MinLengthValidator } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CkServiceService } from '../Service/ck-service.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { min } from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -36,7 +37,7 @@ export class LoginComponent implements OnInit {
           Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$'),
         ],
       ],
-      PassWord: ['', [Validators.required]],
+      Password: ['', [Validators.required]],
     });
     this.registerForm = this.fb.group({
       FullName: ['', [Validators.required]],
@@ -47,7 +48,7 @@ export class LoginComponent implements OnInit {
           Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$'),
         ],
       ],
-      PassWord: ['', [Validators.required]],
+      Password: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
 
@@ -61,6 +62,21 @@ export class LoginComponent implements OnInit {
 
 
   loginSubmit(){
+    console.log(this.loginForm.valid, this.loginForm);
+
+
+    if(this.loginForm.get('Email').value && this.loginForm.controls.Email.status === 'INVALID'){
+      Swal.fire({ text: 'Please enter valid email'});
+      return
+      }
+      if(this.loginForm.get('Password').value && this.loginForm.controls.Password.status === 'INVALID'){
+        Swal.fire({ text: 'Please enter min 5 charecter'});
+        return
+        }
+      if(this.loginForm.invalid){
+        Swal.fire({ text: 'Please fill all fields'});
+        return
+        }
 this.apiService.Userlogin(this.loginForm.value).subscribe({
   next: (data) => {
     Swal.fire({ text: data.StatusResponse });
@@ -71,7 +87,7 @@ if( data.StatusResponse.includes('Sucessfully')){
   localStorage.setItem('Tokken',  data.AccessToken)
   Swal.fire({text:data.StatusResponse})
   setTimeout(() => {
-    
+
     this.router.navigate(["dashboard"])
   }, 1000);
 
@@ -89,10 +105,11 @@ if( data.StatusResponse.includes('Sucessfully')){
 
 
 
-  
+
   onSubmit(){
     this.apiService.UserRegister(this.registerForm.value).subscribe({
       next: (data) => {
+
         this.registerForm.reset()
         Swal.fire({ text: data.statusResponse });
         if(data.statusResponse === 'Success'){
@@ -125,6 +142,6 @@ if( data.StatusResponse.includes('Sucessfully')){
     this.showlogin = !this.showlogin
     }
 
-   
+
   }
 }

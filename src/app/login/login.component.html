@@ -1,10 +1,10 @@
 <div class="gWrapper">
 
   <div class="row mx-2  divrow justify-content-center ">
-    <div class="col-md-10 col-xl-4    " >
+    <div class="col-md-6 col-xl-4    " >
       <div class="CardContainer">
       <div class="gcardContainer" id="gcardContainer">
-      <div class="card-body px-4 py-3 loginform">
+      <div class="card-body px-2 py-3 loginform">
         <div class=" gInputLable text-center"> <span class="gTitle">Login Account </span></div>
         <form [formGroup]="loginForm" class="row my-3 mt-5">
           <div class="form-group col-12   mt-3">
@@ -13,8 +13,8 @@
               (keydown)="focusNext($event, 'password')" />
           </div>
           <div class="form-group col-12   mt-3">
-            <label for="inputVerify3">PassWord</label>
-            <input id="password" class="gInnerInput-border" type="text" formControlName="PassWord"
+            <label for="inputVerify3">Password</label>
+            <input id="password" class="gInnerInput-border" type="text" formControlName="Password"
               (keydown)="focusNext($event, 'submit')" />
           </div>
           <div class="form-group text-center mt-4 gap-4 d-flex justify-content-center">
@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="form-group text-center mt-5 gap-4 d-flex justify-content-center">
-            <span class="gInputLable mt-3">Dont have account?  create new </span>
+            <span class="gInputLable mt-3">Don't have account ?  click to </span>
             <button class="oAuthButton mt-3" style="background-color: #000 !important;" id="submit" type="button" (click)="toggleform()">
               Register
             </button>
@@ -45,8 +45,8 @@
               (keydown)="focusNext($event, 'password1')" />
           </div>
           <div class="form-group col-12   mt-3">
-            <label for="inputVerify3">PassWord</label>
-            <input id="password1" class="gInnerInput-border" type="text" formControlName="PassWord"
+            <label for="inputVerify3">Password</label>
+            <input id="password1" class="gInnerInput-border" type="text" formControlName="Password"
               (keydown)="focusNext($event, 'submit1')" />
 
           </div>
@@ -56,7 +56,7 @@
             </button>
           </div>
           <div class="form-group text-center mt-5 gap-4 d-flex justify-content-center">
-            <span class="gInputLable">Alreadt have account ? click here to</span>
+            <span class="gInputLable">Already have account ? click here to</span>
             <button class="oAuthButton" style="background-color: #000 !important;" id="submit" type="button" (click)="toggleform()">
               Login
             </button>

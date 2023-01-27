@@ -11,7 +11,7 @@ const post = require('../modal/post');
 
 const registerModel = require('./login')
 var bcrypt = require('bcryptjs');
-
+var nodemailer = require('nodemailer');
 
 employeeRoute.route('/register').post(async (req, res, next) =>{
   const oldUser = await registerModel.findOne({ Email:req.body.Email });
@@ -19,12 +19,17 @@ employeeRoute.route('/register').post(async (req, res, next) =>{
     res.json({statusResponse:'User Already Exist. Please Login'})
 return
   }
+
+
+
+
   req.body.PassWord = await bcrypt.hash(req.body.PassWord, 10);
     registerModel.create(req.body, (error, data) => {
       if (error) {
         return next(error)
       } else {
         res.json({statusResponse:'Success'})
+
       }
     })
   });
@@ -47,6 +52,28 @@ return
         AccessToken:token,
           StatusResponse : `Sucessfully loginIn, Welcome ${oldUser.FullName}`
       }
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'muruganck4you@gmail.com',
+          pass: 'Murugan@2406'
+        }
+      });
+
+      var mailOptions = {
+        from: 'muruganck4you@gmail.com',
+        to: 'muruganck4you@gmail.com',
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!, Hi Murugan, I am node js auto bot'
+      };
+
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
 
      res.json(ReObj)
 
@@ -61,8 +88,8 @@ employeeRoute.route('/getEmployee' ).get(async (req, res, ) => {
 
     const oldUser = await registerModel.findOne({ Email:req.body.Email });
   if(oldUser){
-    return res.status(401).send({ auth: false, message: 'Invalid User' });
-  }  
+    // return res.status(401).send({ auth: false, message: 'Invalid User' });
+
   var token = req.headers['authorization'];
   if (!token){
     return res.status(401).send({ auth: false, message: 'No token provided.' });
@@ -81,6 +108,7 @@ employeeRoute.route('/getEmployee' ).get(async (req, res, ) => {
     }
     });
   });
+}
 })
 
 
@@ -97,9 +125,9 @@ employeeRoute.route('/read/:id').get((req, res) => {
 
 employeeRoute.route('/create').post(async (req, res, next) => {
     const oldUser = await registerModel.findOne({ Email:req.body.Email });
-  if(oldUser){
+  if(!oldUser){
     return res.status(401).send({ auth: false, message: 'Invalid User' });
-  } 
+  }
    var token = req.headers['authorization'];
   if (!token){
     return res.status(401).send({ auth: false, message: 'No token provided.' });
@@ -127,7 +155,7 @@ employeeRoute.route('/create').post(async (req, res, next) => {
 
 employeeRoute.route('/update/:id').put(async(req, res, next) => {
     const oldUser = await registerModel.findOne({ Email:req.body.Email });
-  if(oldUser){
+  if(!oldUser){
     return res.status(401).send({ auth: false, message: 'Invalid User' });
   }  var token = req.headers['authorization'];
   if (!token){
@@ -159,9 +187,9 @@ employeeRoute.route('/update/:id').put(async(req, res, next) => {
 
 employeeRoute.route('/delete/:id').delete(async(req, res, next) => {
     const oldUser = await registerModel.findOne({ Email:req.body.Email });
-  if(oldUser){
+  if(!oldUser){
     return res.status(401).send({ auth: false, message: 'Invalid User' });
-  }  
+  }
   var token = req.headers['authorization'];
   if (!token){
     return res.status(401).send({ auth: false, message: 'No token provided.' });
