@@ -31,13 +31,13 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       Email: [
-        '',
+        'muruganck4you@gmail.com',
         [
           Validators.required,
           Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$'),
         ],
       ],
-      Password: ['', [Validators.required]],
+      Password: ['Murugan@123', [Validators.required]],
     });
     this.registerForm = this.fb.group({
       FullName: ['', [Validators.required]],

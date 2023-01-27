@@ -20,10 +20,7 @@ employeeRoute.route('/register').post(async (req, res, next) =>{
 return
   }
 
-
-
-
-  req.body.PassWord = await bcrypt.hash(req.body.PassWord, 10);
+  req.body.Password = await bcrypt.hash(req.body.Password, 10);
     registerModel.create(req.body, (error, data) => {
       if (error) {
         return next(error)
@@ -52,19 +49,20 @@ return
         AccessToken:token,
           StatusResponse : `Sucessfully loginIn, Welcome ${oldUser.FullName}`
       }
+
       var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'muruganck4you@gmail.com',
-          pass: 'Murugan@2406'
+          user: process.env.GMAIL_ID,
+          pass: process.env.GMAIL_PASSWORD
         }
       });
 
       var mailOptions = {
-        from: 'muruganck4you@gmail.com',
-        to: 'muruganck4you@gmail.com',
+        from: process.env.GMAIL_ID,
+        to: oldUser.Email,
         subject: 'Sending Email using Node.js',
-        text: 'That was easy!, Hi Murugan, I am node js auto bot'
+        text: 'Hi, this is Murugan Testing with E-mail service from nodejs'
       };
 
       transporter.sendMail(mailOptions, function(error, info){

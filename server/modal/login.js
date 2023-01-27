@@ -15,7 +15,7 @@ var LoginSchema = new Schema({
         default: null,
         unique: true
     },
-    PassWord:{
+    Password:{
         type:String,
         require: true,
         default: null,
