@@ -1,0 +1,32 @@
+<div class="gWrapper">
+    <app-header></app-header>
+
+
+    <section>
+
+
+
+        <div class="listing-section row mx-1">
+            <div *ngFor="let product of products" class="my-3 col-12 col-sm-6 col-md-4 col-xl-3">
+            <div class="product " >
+              <div class="image-box">
+                <div class="images" id="image-1">
+                    <img src="{{product.images[0]}}" alt="">
+                </div>
+              </div>
+              <div class="text-box">
+                <h2 class="item gInputlable">{{product?.title}}</h2>
+                <h3 class="price gInputlable">{{product.price |currency:"INR":"symbol"}}</h3>
+                <p class="description gInputlable">{{product.description}}</p>
+                <label for="item-1-quantity">Quantity:</label>
+                <input type="text" name="item-1-quantity" id="item-1-quantity" value="1">
+                <button type="button" name="item-1-button" id="item-1-button" (click)="checkout()">Add to Cart</button>
+              </div>
+            </div>
+            </div>
+         
+          </div>
+          
+    
+    </section>
+</div>

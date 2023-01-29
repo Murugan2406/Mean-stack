@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { CkServiceService } from '../Service/ck-service.service';
-import * as pdfjsLib from 'pdfjs-dist';
+// import * as pdfjsLib from 'pdfjs-dist';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 
@@ -29,12 +29,12 @@ export class DashboardComponent implements OnInit {
   edit: boolean = false;
   complete: any;
 
-  constructor(private fbuilder: FormBuilder, public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
     public fb: FormBuilder,
     public http: HttpClient,
     public router: Router,
     private apiService: CkServiceService) {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+    // pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
   }
 
   ngOnInit(): void {
@@ -207,6 +207,9 @@ document.getElementById('phnumber')?.focus()
 
     }
   }
+
+
+
 
 }
 

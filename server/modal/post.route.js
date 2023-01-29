@@ -12,6 +12,61 @@ const post = require('../modal/post');
 const registerModel = require('./login')
 var bcrypt = require('bcryptjs');
 var nodemailer = require('nodemailer');
+dotenv.config();
+const stripe = require('stripe')(process.env.STRIPE_SECRECT_KEY);
+
+const storeItems = new Map([
+  [1, {price:1500, name:'product1'}],
+  [2, {price:2500, name:'product2'}],
+
+
+])
+
+
+
+employeeRoute.route('/payment').post(async (req, res, next) =>{
+// console.log(req);
+const items = [
+  {id:1, quantity:3 },
+  {id:2, quantity:3 },
+
+]
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types:['card'],
+      mode:'payment',
+      line_items:
+      items.map(item =>{
+  const storeItem = storeItems.get(item.id)
+  return {
+    price_data :{
+                currency:'inr',
+                product_data:{name:'product1'},
+                unit_amount:500
+                
+              },
+              quantity:1
+  }
+}),
+      success_url:'http://localhost:4200/sucess',
+      cancel_url:'http://localhost:4200/dashboard'
+
+    })
+    console.log(session);
+    res.json(session.url)
+
+  } catch (error) {
+    res.json({statusResponse:error+'payment error'})
+    
+  }
+
+
+
+})
+
+
+
+
 
 employeeRoute.route('/register').post(async (req, res, next) =>{
   const oldUser = await registerModel.findOne({ Email:req.body.Email });
@@ -84,10 +139,7 @@ return
 
 employeeRoute.route('/getEmployee' ).get(async (req, res, ) => {
 
-    const oldUser = await registerModel.findOne({ Email:req.body.Email });
-  if(oldUser){
-    // return res.status(401).send({ auth: false, message: 'Invalid User' });
-
+  const oldUser = await registerModel.findOne({ Email:req.body.Email });
   var token = req.headers['authorization'];
   if (!token){
     return res.status(401).send({ auth: false, message: 'No token provided.' });
@@ -102,11 +154,12 @@ employeeRoute.route('/getEmployee' ).get(async (req, res, ) => {
       res.json({statusResponse:'unknown error'});
     }
     else {
+
     res.json(employee);
     }
     });
   });
-}
+// }
 })
 
 

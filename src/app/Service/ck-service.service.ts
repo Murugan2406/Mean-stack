@@ -98,5 +98,23 @@ export class CkServiceService {
 
     }
 
+    payments(data:any) {
+      console.log(data);
+      // return
+      
+      return this.http.post(`${this.baseUri}payment`, data).pipe(catchError(this.errorMgmt));
+    }
+
+
+    getProducts() {
+      // return this.http.get(`${this.baseUri}getEmployee`, { headers: this.headers } );
+
+
+      return this.http.get('https://dummyjson.com/products');
+
+      return this.http.get('https://fakestoreapi.com/products');
+
+    }
+    
 
 }

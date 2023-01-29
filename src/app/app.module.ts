@@ -24,6 +24,12 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
+import { PaymentsuccessComponent } from './paymentsuccess/paymentsuccess.component';
+import { PaymentfailureComponent } from './paymentfailure/paymentfailure.component';
+// import { ListpageComponent } from './listpage/listpage.component';
+import { CardComponent } from './card/card.component';
+import { OrderComponent } from './order/order.component';
+import { ListProductComponent } from './list-product/list-product.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +38,13 @@ import {MatSelectModule} from '@angular/material/select';
     LoginComponent,
     RegisterComponent,
     HeaderComponent,
-    SidenavComponent
+    SidenavComponent,
+    PaymentsuccessComponent,
+    PaymentfailureComponent,
+    // ListpageComponent,
+    CardComponent,
+    OrderComponent,
+    ListProductComponent
   ],
   imports: [
     BrowserModule,
