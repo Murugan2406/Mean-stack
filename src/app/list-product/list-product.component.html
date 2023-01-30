@@ -1,5 +1,5 @@
 <div class="gWrapper">
-    <app-header></app-header>
+    <app-header ></app-header>
 
 
     <section>
@@ -11,16 +11,18 @@
             <div class="product " >
               <div class="image-box">
                 <div class="images" id="image-1">
-                    <img src="{{product.images[0]}}" alt="">
+                    <img src="{{product.image}}" alt="">
                 </div>
               </div>
               <div class="text-box">
-                <h2 class="item gInputlable">{{product?.title}}</h2>
+                <h2 class="item gInputlable">{{product?.name}}</h2>
                 <h3 class="price gInputlable">{{product.price |currency:"INR":"symbol"}}</h3>
-                <p class="description gInputlable">{{product.description}}</p>
-                <label for="item-1-quantity">Quantity:</label>
-                <input type="text" name="item-1-quantity" id="item-1-quantity" value="1">
-                <button type="button" name="item-1-button" id="item-1-button" (click)="checkout()">Add to Cart</button>
+                <p class="description gInputlable">{{product.desciption}}</p>
+                <label for="item-1-quantity text-center gap-3">Quantity:
+                <input type="text" name="item-1-quantity" id="item-1-quantity" value="{{product.rating}}" >
+                <!-- <span>{{product.rating}}</span> -->
+              </label>
+                <button type="button" name="item-1-button" id="item-1-button" (click)="checkout(product)">checkout</button>
               </div>
             </div>
             </div>

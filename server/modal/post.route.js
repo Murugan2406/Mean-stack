@@ -15,52 +15,36 @@ var nodemailer = require('nodemailer');
 dotenv.config();
 const stripe = require('stripe')(process.env.STRIPE_SECRECT_KEY);
 
-const storeItems = new Map([
-  [1, {price:1500, name:'product1'}],
-  [2, {price:2500, name:'product2'}],
-
-
-])
-
 
 
 employeeRoute.route('/payment').post(async (req, res, next) =>{
-// console.log(req);
-const items = [
-  {id:1, quantity:3 },
-  {id:2, quantity:3 },
+console.log(req);
 
-]
+const arr =  [{
+  price_data: { 
+    currency: 'inr',
+     product_data: {name:'product1'}, 
+     unit_amount: 500 },
+  quantity: 1
+},]
+
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types:['card'],
       mode:'payment',
-      line_items:
-      items.map(item =>{
-  const storeItem = storeItems.get(item.id)
-  return {
-    price_data :{
-                currency:'inr',
-                product_data:{name:'product1'},
-                unit_amount:500
-                
-              },
-              quantity:1
-  }
-}),
+      line_items:arr,
       success_url:'http://localhost:4200/sucess',
       cancel_url:'http://localhost:4200/dashboard'
 
     })
-    console.log(session);
+    // console.log();
+    // console.log(session);
     res.json(session.url)
 
   } catch (error) {
     res.json({statusResponse:error+'payment error'})
     
   }
-
-
 
 })
 
@@ -371,5 +355,12 @@ employeeRoute.route('/fileread').post(async (req, res, next) => {
   }
 
 });
+
+
+
+
+// E - commerce
+
+
 
 module.exports = employeeRoute;

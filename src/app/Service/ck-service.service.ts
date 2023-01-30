@@ -102,7 +102,7 @@ export class CkServiceService {
       console.log(data);
       // return
       
-      return this.http.post(`${this.baseUri}payment`, data).pipe(catchError(this.errorMgmt));
+      return this.http.post(`${this.eCommerceUrl}payment`, data).pipe(catchError(this.errorMgmt));
     }
 
 
@@ -110,11 +110,20 @@ export class CkServiceService {
       // return this.http.get(`${this.baseUri}getEmployee`, { headers: this.headers } );
 
 
-      return this.http.get('https://dummyjson.com/products');
+      return this.http.get(`${this.eCommerceUrl}/getProducs`);
 
-      return this.http.get('https://fakestoreapi.com/products');
+      // return this.http.get('https://fakestoreapi.com/products');
+
 
     }
     
+    eCommerceUrl: string = 'http://localhost:4000/apis/';
+
+    
+    addProduct(data:any): Observable<any> {
+      let url = `${this.eCommerceUrl}/addProduct`;
+      return this.http.post(url, data).pipe(catchError(this.errorMgmt));
+    }
+
 
 }
